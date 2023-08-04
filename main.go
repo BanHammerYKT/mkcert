@@ -91,18 +91,21 @@ func main() {
 	}
 	log.SetFlags(0)
 	var (
-		installFlag   = flag.Bool("install", false, "")
-		uninstallFlag = flag.Bool("uninstall", false, "")
-		pkcs12Flag    = flag.Bool("pkcs12", false, "")
-		ecdsaFlag     = flag.Bool("ecdsa", false, "")
-		clientFlag    = flag.Bool("client", false, "")
-		helpFlag      = flag.Bool("help", false, "")
-		carootFlag    = flag.Bool("CAROOT", false, "")
-		csrFlag       = flag.String("csr", "", "")
-		certFileFlag  = flag.String("cert-file", "", "")
-		keyFileFlag   = flag.String("key-file", "", "")
-		p12FileFlag   = flag.String("p12-file", "", "")
-		versionFlag   = flag.Bool("version", false, "")
+		installFlag      = flag.Bool("install", false, "")
+		uninstallFlag    = flag.Bool("uninstall", false, "")
+		pkcs12Flag       = flag.Bool("pkcs12", false, "")
+		ecdsaFlag        = flag.Bool("ecdsa", false, "")
+		clientFlag       = flag.Bool("client", false, "")
+		helpFlag         = flag.Bool("help", false, "")
+		carootFlag       = flag.Bool("CAROOT", false, "")
+		csrFlag          = flag.String("csr", "", "")
+		certFileFlag     = flag.String("cert-file", "", "")
+		keyFileFlag      = flag.String("key-file", "", "")
+		p12FileFlag      = flag.String("p12-file", "", "")
+		versionFlag      = flag.Bool("version", false, "")
+		organization     = flag.String("o", "", "")
+		organizationUnit = flag.String("ou", "", "")
+		commonName       = flag.String("cn", "", "")
 	)
 	flag.Usage = func() {
 		fmt.Fprint(flag.CommandLine.Output(), shortUsage)
@@ -146,6 +149,7 @@ func main() {
 		installMode: *installFlag, uninstallMode: *uninstallFlag, csrPath: *csrFlag,
 		pkcs12: *pkcs12Flag, ecdsa: *ecdsaFlag, client: *clientFlag,
 		certFile: *certFileFlag, keyFile: *keyFileFlag, p12File: *p12FileFlag,
+		organization: *organization, organizationUnit: *organizationUnit, commonName: *commonName,
 	}).Run(flag.Args())
 }
 
@@ -153,10 +157,11 @@ const rootName = "rootCA.pem"
 const rootKeyName = "rootCA-key.pem"
 
 type mkcert struct {
-	installMode, uninstallMode bool
-	pkcs12, ecdsa, client      bool
-	keyFile, certFile, p12File string
-	csrPath                    string
+	installMode, uninstallMode                 bool
+	pkcs12, ecdsa, client                      bool
+	keyFile, certFile, p12File                 string
+	csrPath                                    string
+	organization, organizationUnit, commonName string
 
 	CAROOT string
 	caCert *x509.Certificate
